@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Sarshti ✨</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #fff0f3;
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        #container {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            max-width: 500px;
+            width: 85%;
+            z-index: 10;
+            position: relative;
+        }
+
+        .step { display: none; animation: fadeIn 1s ease-in-out; }
+        .active { display: block; }
+
+        h2 { color: #ff4d6d; font-size: 1.8em; margin-bottom: 20px; }
+        p { color: #4a4a4a; line-height: 1.8; font-size: 1.1em; }
+
+        .btn-next {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1em;
+        }
+
+        .game-container { position: relative; height: 150px; margin-top: 20px; }
+        #yesBtn { background: #ff4d6d; color: white; border: none; padding: 15px 35px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1.2em; }
+        #noBtn { background: #adb5bd; color: white; border: none; padding: 10px 20px; border-radius: 50px; position: absolute; cursor: pointer; white-space: nowrap; }
+
+        .bouquet { font-size: 100px; margin-bottom: 10px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .floating-item { position: absolute; opacity: 0.2; z-index: 1; animation: float 8s infinite linear; }
+        @keyframes float { 0% { transform: translateY(0) rotate(0); } 100% { transform: translateY(-100vh) rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="successMusic">
+        <source src="https://www.myinstants.com/media/sounds/wedding-march.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="floating-item" style="left: 5%; bottom: 0; font-size: 40px;">🌸</div>
+    <div class="floating-item" style="left: 25%; bottom: -10%; font-size: 30px; animation-delay: 2s;">📖</div>
+    <div class="floating-item" style="right: 15%; bottom: -20%; font-size: 50px; animation-delay: 4s;">💝</div>
+    <div class="floating-item" style="right: 5%; bottom: 0; font-size: 35px; animation-delay: 1s;">✨</div>
+
+    <div id="container">
+        
+        <div id="step1" class="step active">
+            <h2>Hey Sarshti...</h2>
+            <p>
+                I’ve been thinking about that day at the wedding. We haven't met face-to-face yet, 
+                but talking to you feels like finding a favorite book I never knew I had. 
+                You're so humble and "good" in a way that's rare to find these days.
+            </p>
+            <button class="btn-next" onclick="startExperience()">Click to continue...</button>
+        </div>
+
+        <div id="step2" class="step">
+            <h2>Our Little World</h2>
+            <p>
+                Even though there's a 4-year gap and we come from different worlds—Commerce and B.Tech—
+                our calls and chats have a 'balance' that no ledger could explain. 
+                You’re the calm to my engineering chaos. I really value what we’ve built so far.
+            </p>
+            <button class="btn-next" onclick="nextStep(3)">One more thing...</button>
+        </div>
+
+        <div id="step3" class="step">
+            <h2>The Big Question</h2>
+            <p>
+                I want to upgrade our "connection" to the next version. 
+                I know you’re the senior here, but would you give this 1st-year student 
+                the honor of being your Valentine?
+            </p>
+            <div class="game-container">
+                <button id="yesBtn" onclick="celebrate()">YES! ❤️</button>
+                <button id="noBtn" onmouseover="moveNo()">No</button>
+            </div>
+        </div>
+
+        <div id="step4" class="step">
+            <div class="bouquet">💐</div>
+            <h2>I knew it! ❤️</h2>
+            <p>The deal is finalized, Sarshti! No refunds or returns allowed. 😉</p>
+            <p><b>So... tell me: When and where are we finally meeting for our date?</b></p>
+            <p style="font-size: 0.9em; color: #ff4d6d;">(Send me a screenshot of this!)</p>
+        </div>
+
+    </div>
+
+    <script>
+        let noCount = 0;
+        const bgMusic = document.getElementById('bgMusic');
+        const successMusic = document.getElementById('successMusic');
+
+        // Browsers block auto-play, so we start it on the first click
+        function startExperience() {
+            bgMusic.play();
+            nextStep(2);
+        }
+
+        function nextStep(stepNum) {
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            document.getElementById('step' + stepNum).classList.add('active');
+        }
+
+        function celebrate() {
+            bgMusic.pause(); // Stop romantic music
+            successMusic.play(); // Play success music
+            nextStep(4);
+            launchHearts();
+        }
+
+        function moveNo() {
+            const noBtn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - 150);
+            const y = Math.random() * (window.innerHeight - 50);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+            
+            const messages = ["Think Again!!", "Don't test my Patience! 😤", "Yes is best ROI !!", "Are you sure?", "Don't be so brutal","That button seems broken… try the other one.", "Think once more… my heart is on the line.", "Okay, last try… will you make me the happiest person today?"];
+            noBtn.innerText = messages[noCount % messages.length];
+            noCount++;
+        }
+
+        function launchHearts() {
+            for(let i=0; i<30; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.style.position = 'fixed';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = '100vh';
+                heart.style.fontSize = '25px';
+                heart.style.zIndex = '100';
+                heart.style.transition = 'transform 4s linear, opacity 4s';
+                document.body.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.style.transform = `translateY(-120vh) translateX(${Math.random() * 200 - 100}px)`;
+                    heart.style.opacity = '0';
+                }, 100);
+                
+                setTimeout(() => heart.remove(), 4000);
+            }
+        }
+    </script>
+</body>
+</html>
