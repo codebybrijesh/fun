@@ -75,26 +75,35 @@
     <div id="container">
         
         <div id="step1" class="step active">
-            <h2>Hey Sarshti...</h2>
+            <h2>Hey Sarshti... ✨</h2>
+            <p>
+                I’ve built something special to tell you what's on my mind. 
+                Before we start, make sure your volume is up! 🎵
+            </p>
+            <button class="btn-next" onclick="startExperience()">Open My Message</button>
+        </div>
+
+        <div id="step2" class="step">
+            <h2>The Impression...</h2>
             <p>
                 I’ve been thinking about that day at the wedding. We haven't met face-to-face yet, 
                 but talking to you feels like finding a favorite book I never knew I had. 
                 You're so humble and "good" in a way that's rare to find these days.
             </p>
-            <button class="btn-next" onclick="startExperience()">Click to continue...</button>
+            <button class="btn-next" onclick="nextStep(3)">Click to continue...</button>
         </div>
 
-        <div id="step2" class="step">
+        <div id="step3" class="step">
             <h2>Our Little World</h2>
             <p>
                 Even though there's a 4-year gap and we come from different worlds—Commerce and B.Tech—
                 our calls and chats have a 'balance' that no ledger could explain. 
                 You’re the calm to my engineering chaos. I really value what we’ve built so far.
             </p>
-            <button class="btn-next" onclick="nextStep(3)">One more thing...</button>
+            <button class="btn-next" onclick="nextStep(4)">One more thing...</button>
         </div>
 
-        <div id="step3" class="step">
+        <div id="step4" class="step">
             <h2>The Big Question</h2>
             <p>
                 I want to upgrade our "connection" to the next version. 
@@ -107,7 +116,7 @@
             </div>
         </div>
 
-        <div id="step4" class="step">
+        <div id="step5" class="step">
             <div class="bouquet">💐</div>
             <h2>I knew it! ❤️</h2>
             <p>The deal is finalized, Sarshti! No refunds or returns allowed. 😉</p>
@@ -122,9 +131,9 @@
         const bgMusic = document.getElementById('bgMusic');
         const successMusic = document.getElementById('successMusic');
 
-        // Browsers block auto-play, so we start it on the first click
         function startExperience() {
-            bgMusic.play();
+            // Start music immediately on the first click
+            bgMusic.play().catch(e => console.log("Audio failed to play:", e));
             nextStep(2);
         }
 
@@ -134,9 +143,9 @@
         }
 
         function celebrate() {
-            bgMusic.pause(); // Stop romantic music
-            successMusic.play(); // Play success music
-            nextStep(4);
+            bgMusic.pause();
+            successMusic.play();
+            nextStep(5);
             launchHearts();
         }
 
@@ -149,7 +158,7 @@
             noBtn.style.left = x + 'px';
             noBtn.style.top = y + 'px';
             
-            const messages = ["Think Again!!", "Don't test my Patience! 😤", "Yes is best ROI !!", "Are you sure?", "Don't be so brutal","That button seems broken… try the other one.", "Think once more… my heart is on the line.", "Okay, last try… will you make me the happiest person today?"];
+            const messages = ["Think Again!!", "Don't test my Patience! 😤", "Yes is best ROI !!"];
             noBtn.innerText = messages[noCount % messages.length];
             noCount++;
         }
@@ -176,5 +185,4 @@
         }
     </script>
 </body>
-
 </html>
