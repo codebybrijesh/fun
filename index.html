@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Sarshti ✨</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
+        body, html {
+            margin: 0; padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -27,6 +26,7 @@
             width: 85%;
             z-index: 10;
             position: relative;
+            transition: opacity 1s ease;
         }
 
         .step { display: none; animation: fadeIn 1s ease-in-out; }
@@ -56,16 +56,24 @@
 
         .floating-item { position: absolute; opacity: 0.2; z-index: 1; animation: float 8s infinite linear; }
         @keyframes float { 0% { transform: translateY(0) rotate(0); } 100% { transform: translateY(-100vh) rotate(360deg); } }
+
+        /* Particle Canvas Style */
+        #canvas {
+            display: none;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            z-index: 5;
+        }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop>
-        <source src="ks.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="successMusic">
-        <source src="if.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bgMusic" loop><source src="ks.mp3" type="audio/mpeg"></audio>
+    <audio id="successMusic"><source src="if.mp3" type="audio/mpeg"></audio>
+
+    <canvas id="canvas"></canvas>
 
     <div class="floating-item" style="left: 5%; bottom: 0; font-size: 40px;">🌸</div>
     <div class="floating-item" style="left: 25%; bottom: -10%; font-size: 30px; animation-delay: 2s;">📖</div>
@@ -73,43 +81,27 @@
     <div class="floating-item" style="right: 5%; bottom: 0; font-size: 35px; animation-delay: 1s;">✨</div>
 
     <div id="container">
-        
         <div id="step1" class="step active">
             <h2>Hey Sarshti... ✨</h2>
-            <p>
-                I’ve built something special to tell you what's on my mind. 
-                Before we start, make sure your volume is up! 🎵
-            </p>
+            <p>I’ve built something special to tell you what's on my mind.<br>Before we start, make sure your volume is up! 🎵</p>
             <button class="btn-next" onclick="startExperience()">Open My Message</button>
         </div>
 
         <div id="step2" class="step">
             <h2>The Impression...</h2>
-            <p>
-                I’ve been thinking about that day at the wedding. We haven't met face-to-face yet, 
-                but talking to you feels like finding a favorite book I never knew I had. 
-                You're so humble and "good" in a way that's rare to find these days.
-            </p>
+            <p>I’ve been thinking about that day at the wedding. We haven't met face-to-face yet, but talking to you feels like finding a favorite book I never knew I had. You're so humble and "good" in a way that's rare to find these days.</p>
             <button class="btn-next" onclick="nextStep(3)">Click to continue...</button>
         </div>
 
         <div id="step3" class="step">
             <h2>Our Little World</h2>
-            <p>
-                Even though there's a 4-year gap and we come from different worlds—Commerce and B.Tech—
-                our calls and chats have a 'balance' that no ledger could explain. 
-                You’re the calm to my engineering chaos. I really value what we’ve built so far.
-            </p>
+            <p>Even though there's a 4-year gap and we come from different worlds—Commerce and B.Tech—our calls and chats have a 'balance' that no ledger could explain. You’re the calm to my engineering chaos.</p>
             <button class="btn-next" onclick="nextStep(4)">One more thing...</button>
         </div>
 
         <div id="step4" class="step">
             <h2>The Big Question</h2>
-            <p>
-                I want to upgrade our "connection" to the next version. 
-                I know you’re the senior here, but would you give this 1st-year student 
-                the honor of being your Valentine?
-            </p>
+            <p>I want to upgrade our "connection" to the next version. Would you give this 1st-year student the honor of being your Valentine?</p>
             <div class="game-container">
                 <button id="yesBtn" onclick="celebrate()">YES! ❤️</button>
                 <button id="noBtn" onmouseover="moveNo()">No</button>
@@ -120,20 +112,20 @@
             <div class="bouquet">💐</div>
             <h2>I knew it! ❤️</h2>
             <p>The deal is finalized, Sarshti! No refunds or returns allowed. 😉</p>
-            <p><b>So... tell me: When and where are we finally meeting for our date?</b></p>
-            <p style="font-size: 0.9em; color: #ff4d6d;">(Send me a screenshot of this!)</p>
+            <p><b>When and where are we finally meeting for our date?</b></p>
+            <button class="btn-next" onclick="showSurprise()">Click for one last surprise...</button>
         </div>
-
     </div>
 
     <script>
         let noCount = 0;
         const bgMusic = document.getElementById('bgMusic');
         const successMusic = document.getElementById('successMusic');
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
 
         function startExperience() {
-            // Start music immediately on the first click
-            bgMusic.play().catch(e => console.log("Audio failed to play:", e));
+            bgMusic.play().catch(e => console.log(e));
             nextStep(2);
         }
 
@@ -153,33 +145,128 @@
             const noBtn = document.getElementById('noBtn');
             const x = Math.random() * (window.innerWidth - 150);
             const y = Math.random() * (window.innerHeight - 50);
-            
             noBtn.style.position = 'fixed';
-            noBtn.style.left = x + 'px';
-            noBtn.style.top = y + 'px';
-            
+            noBtn.style.left = x + 'px'; noBtn.style.top = y + 'px';
             const messages = ["Think Again!!", "Don't test my Patience! 😤", "Yes is best ROI !!"];
             noBtn.innerText = messages[noCount % messages.length];
             noCount++;
         }
 
+        function showSurprise() {
+            document.getElementById('container').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('container').style.display = 'none';
+                canvas.style.display = 'block';
+                initParticles();
+                animateParticles();
+            }, 1000);
+        }
+
+        // --- PARTICLE ENGINE ---
+        let particles = [];
+        const PARTICLE_COUNT = 8000;
+        const HEART_SCALE = 18;
+        let exploded = false;
+
+        window.addEventListener('mousedown', () => {
+            exploded = true;
+            setTimeout(() => { exploded = false; }, 2500);
+        });
+
+        class Particle {
+            constructor(targetX, targetY, isText = false) {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.baseX = targetX;
+                this.baseY = targetY;
+                this.vx = (Math.random() - 0.5) * 25;
+                this.vy = (Math.random() - 0.5) * 25;
+                this.acc = isText ? 0.15 : 0.08;
+                this.friction = 0.92;
+                this.size = isText ? Math.random() * 2 + 1.2 : Math.random() * 1 + 0.5;
+                this.color = isText ? "#ffffff" : "#ff1a4d";
+                this.isText = isText;
+            }
+            update() {
+                if (exploded) {
+                    this.x += this.vx; this.y += this.vy;
+                    this.vx *= this.friction; this.vy *= this.friction;
+                } else {
+                    let dx = this.baseX - this.x;
+                    let dy = this.baseY - this.y;
+                    this.x += dx * this.acc; this.y += dy * this.acc;
+                    this.vx = (Math.random() - 0.5) * 30;
+                    this.vy = (Math.random() - 0.5) * 30;
+                }
+                this.x += Math.sin(Date.now() * 0.002 + this.baseX) * 0.3;
+                this.y += Math.cos(Date.now() * 0.002 + this.baseY) * 0.3;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                if(this.isText) { ctx.shadowBlur = 15; ctx.shadowColor = "#ff80bf"; }
+                else { ctx.shadowBlur = 2; ctx.shadowColor = "#ff1a4d"; }
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            const textCanvas = document.createElement('canvas');
+            const tCtx = textCanvas.getContext('2d');
+            textCanvas.width = canvas.width; textCanvas.height = canvas.height;
+            tCtx.fillStyle = 'white';
+            tCtx.font = '900 65px Arial'; 
+            tCtx.textAlign = 'center';
+            tCtx.fillText("I love you, Sarshti", centerX, centerY + 20);
+            
+            const pixels = tCtx.getImageData(0, 0, canvas.width, canvas.height).data;
+            const textTargets = [];
+            for (let y = 0; y < canvas.height; y += 3) {
+                for (let x = 0; x < canvas.width; x += 3) {
+                    if (pixels[(y * canvas.width + x) * 4] > 128) textTargets.push({x, y});
+                }
+            }
+
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                if (i < textTargets.length) {
+                    particles.push(new Particle(textTargets[i].x, textTargets[i].y, true));
+                } else {
+                    const t = Math.random() * Math.PI * 2;
+                    const r = 0.3 + Math.random() * 0.7; 
+                    const x = 16 * Math.pow(Math.sin(t), 3);
+                    const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+                    particles.push(new Particle(centerX + x * HEART_SCALE * r, centerY - y * HEART_SCALE * r, false));
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.25)"; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+
         function launchHearts() {
             for(let i=0; i<30; i++) {
                 const heart = document.createElement('div');
-                heart.innerHTML = '❤️';
-                heart.style.position = 'fixed';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.top = '100vh';
-                heart.style.fontSize = '25px';
-                heart.style.zIndex = '100';
+                heart.innerHTML = '❤️'; heart.style.position = 'fixed';
+                heart.style.left = Math.random() * 100 + 'vw'; heart.style.top = '100vh';
+                heart.style.fontSize = '25px'; heart.style.zIndex = '100';
                 heart.style.transition = 'transform 4s linear, opacity 4s';
                 document.body.appendChild(heart);
-                
                 setTimeout(() => {
                     heart.style.transform = `translateY(-120vh) translateX(${Math.random() * 200 - 100}px)`;
                     heart.style.opacity = '0';
                 }, 100);
-                
                 setTimeout(() => heart.remove(), 4000);
             }
         }
