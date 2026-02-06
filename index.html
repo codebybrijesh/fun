@@ -15,26 +15,27 @@
             font-family: 'Georgia', serif;
             overflow: hidden;
             text-align: center;
-            transition: background 1s ease;
+            transition: background 1s ease, background-image 1s ease;
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
         }
 
-        /* Overlay to make text readable over backgrounds */
+        /* Overlay to make text readable over the dark rose background */
         .bg-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5); /* Slightly darker for better contrast */
             display: none;
             z-index: 1;
         }
 
         #container {
             background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(5px); /* Modern Glass effect */
+            backdrop-filter: blur(8px); /* Increased blur for glass effect */
             padding: 40px;
             border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.3);
             max-width: 500px;
             width: 85%;
             z-index: 10;
@@ -46,7 +47,7 @@
         .active { display: block; }
 
         h2 { color: #ff4d6d; font-size: 1.8em; margin-bottom: 20px; }
-        p { color: #4a4a4a; line-height: 1.8; font-size: 1.1em; }
+        p { color: #333; line-height: 1.8; font-size: 1.1em; font-weight: 500; }
 
         .btn-next {
             background: #ff4d6d;
@@ -57,7 +58,9 @@
             cursor: pointer;
             margin-top: 20px;
             font-size: 1em;
+            transition: transform 0.2s;
         }
+        .btn-next:hover { transform: scale(1.05); }
 
         /* Timeline Styles */
         .timeline {
@@ -86,7 +89,7 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .floating-item { position: absolute; opacity: 0.2; z-index: 1; animation: float 8s infinite linear; }
+        .floating-item { position: absolute; opacity: 0.3; z-index: 1; animation: float 8s infinite linear; }
         @keyframes float { 0% { transform: translateY(0) rotate(0); } 100% { transform: translateY(-100vh) rotate(360deg); } }
 
         #canvas { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 15; }
@@ -162,8 +165,11 @@
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
 
+        // Use the rose background you provided
+        const ROSE_BG = "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3AtNDYyLWV5ZS0wMzU0LmpwZw.jpg";
+
         function startExperience() {
-            bgMusic.play().catch(e => console.log(e));
+            bgMusic.play().catch(e => console.log("Music play blocked by browser until interaction"));
             nextStep(2);
         }
 
@@ -172,13 +178,15 @@
             const overlay = document.getElementById('overlay');
             const container = document.getElementById('container');
 
-            // Handle Background Changes
-            if(stepNum === 2) {
-                body.style.backgroundImage = "url('step2_bg.jpg')";
+            // Handle Background Changes using the Rose Image
+            if(stepNum >= 2 && stepNum <= 4) {
+                body.style.backgroundImage = `url('${ROSE_BG}')`;
                 overlay.style.display = "block";
                 container.style.background = "rgba(255, 255, 255, 0.85)";
-            } else if(stepNum === 3) {
-                body.style.backgroundImage = "url('step3_bg.jpg')";
+            } else if(stepNum === 5) {
+                body.style.backgroundImage = `url('${ROSE_BG}')`;
+                overlay.style.display = "block";
+                container.style.background = "rgba(255, 255, 255, 1)";
             } else {
                 body.style.backgroundImage = "none";
                 overlay.style.display = "none";
@@ -219,7 +227,7 @@
             noCount++;
         }
 
-        // --- PARTICLE ENGINE (UNCHANGED) ---
+        // --- PARTICLE ENGINE ---
         let particles = [];
         const PARTICLE_COUNT = 8000;
         const HEART_SCALE = 18;
